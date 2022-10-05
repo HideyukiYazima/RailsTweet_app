@@ -58,8 +58,8 @@ class UsersController < ApplicationController
   end
   
   def login
-    @user = User.find_by(email: params[:email], password: params[:password])
-    if @user
+    @user = User.find_by(email: params[:email])
+    if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
       flash[:notice] = "ログインしました"
       redirect_to("/posts/index")
@@ -79,7 +79,6 @@ class UsersController < ApplicationController
   
   def likes
     @user = User.find_by(id: params[:id])
-    
     @likes = Like.where(user_id: @user.id)
   end
   
